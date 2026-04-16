@@ -6,77 +6,26 @@
     <title>إلى رقية الغالية</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
-        
         :root { --accent: #ff2d55; --bg: #0f0f0f; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-
-        body {
-            background-color: var(--bg);
-            height: 100vh; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
-            color: white;
-        }
-
-        #video-hidden-container {
-            position: absolute;
-            width: 1px; height: 1px;
-            top: -1000px; left: -1000px;
-            opacity: 0; pointer-events: none;
-            z-index: -999;
-        }
-
-        .main-card {
-            width: 90%; max-width: 420px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; padding: 30px;
-            text-align: center; z-index: 999;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-
+        body { background-color: var(--bg); height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; }
+        #video-hidden-container { position: absolute; width: 1px; height: 1px; top: -1000px; left: -1000px; opacity: 0; pointer-events: none; z-index: -999; }
+        .main-card { width: 90%; max-width: 420px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; padding: 30px; text-align: center; z-index: 999; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         .hidden { display: none !important; }
-
         h1 { color: var(--accent); margin-bottom: 20px; font-size: 1.8rem; }
         p { color: #ccc; line-height: 1.7; margin-bottom: 25px; }
-
-        .btn {
-            background: var(--accent); color: white; border: none;
-            padding: 15px 35px; border-radius: 50px; cursor: pointer;
-            font-weight: bold; font-size: 1.1rem; width: 100%;
-            box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
-        }
-
-        input {
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.1);
-            border: 1px solid var(--accent); border-radius: 12px;
-            color: white; text-align: center; margin-bottom: 20px;
-        }
-
+        .btn { background: var(--accent); color: white; border: none; padding: 15px 35px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1.1rem; width: 100%; box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3); }
+        input { width: 100%; padding: 15px; background: rgba(255,255,255,0.1); border: 2px solid var(--accent); border-radius: 15px; color: white; text-align: center; margin-bottom: 25px; font-size: 1.2rem; outline: none; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-        .box { 
-            background: rgba(255, 255, 255, 0.05); height: 70px; border-radius: 15px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        .box { background: rgba(255, 255, 255, 0.05); height: 70px; border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1); }
         .box.active { background: var(--accent); border: none; }
-
-        /* ستايل العداد */
-        .timer-container {
-            display: flex; justify-content: space-around;
-            margin-top: 25px; background: rgba(0,0,0,0.3);
-            padding: 15px; border-radius: 20px;
-            border: 1px solid rgba(255, 45, 85, 0.2);
-        }
+        .timer-container { display: flex; justify-content: space-around; margin-top: 25px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 45, 85, 0.2); }
         .timer-unit { font-size: 0.7rem; color: #888; }
         .timer-val { display: block; font-size: 1.4rem; color: var(--accent); font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div id="video-hidden-container">
-        <div id="yt-player"></div>
-    </div>
+    <div id="video-hidden-container"><div id="yt-player"></div></div>
 
     <div id="s1" class="main-card">
         <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
@@ -100,78 +49,55 @@
 
     <div id="s4" class="main-card hidden">
         <h1>أحبكِ جداً ❤️</h1>
-        <p id="msg" style="min-height: 60px;"></p>
-        
+        <p id="msg" style="min-height: 60px; font-size: 1.1rem; color: #eee;"></p>
         <div class="timer-container">
             <div class="timer-unit"><span id="days" class="timer-val">0</span>يوم</div>
             <div class="timer-unit"><span id="hours" class="timer-val">0</span>ساعة</div>
             <div class="timer-unit"><span id="minutes" class="timer-val">0</span>دقيقة</div>
             <div class="timer-unit"><span id="seconds" class="timer-val">0</span>ثانية</div>
         </div>
-
-        <p style="font-size: 1.5rem; margin-top: 20px;">♓</p>
+        <p style="font-size: 2.5rem; margin-top: 20px;">💍</p>
     </div>
 
     <script>
         let player;
-        // ملاحظة: غير التاريخ هنا لتاريخ بداية علاقتكم الحقيقي
-        const startDate = new Date("2024-03-20T00:00:00"); 
+        const startDate = new Date("2026-03-21T00:00:00"); 
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
-                videoId: 'HcodxmdesfY',
-                playerVars: { 'start': 14, 'autoplay': 0, 'controls': 0 }
-            });
+            player = new YT.Player('yt-player', { videoId: 'HcodxmdesfY', playerVars: { 'start': 14, 'autoplay': 0, 'controls': 0 } });
         }
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.body.appendChild(tag);
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; document.body.appendChild(tag);
 
-        function go(n) {
-            document.querySelectorAll('.main-card').forEach(c => c.classList.add('hidden'));
-            document.getElementById('s'+n).classList.remove('hidden');
-        }
+        function go(n) { document.querySelectorAll('.main-card').forEach(c => c.classList.add('hidden')); document.getElementById('s'+n).classList.remove('hidden'); }
 
         function verify() {
-            if(document.getElementById('pass').value.toLowerCase() === 'bytex') {
-                setupGrid(); go(3);
-            } else { alert("الإجابة خاطئة يا رقية! 😉"); }
+            if(document.getElementById('pass').value.toLowerCase() === 'bytex') { setupGrid(); go(3); } 
+            else { alert("الإجابة خاطئة يا رقية! حاولي مرة أخرى 😉"); }
         }
 
         let found = 0;
         function setupGrid() {
-            const hearts = [0, 4, 8];
-            const g = document.getElementById('game-grid');
+            const hearts = [0, 4, 8]; const g = document.getElementById('game-grid');
             for(let i=0; i<9; i++) {
                 let b = document.createElement('div'); b.className = 'box';
                 b.onclick = () => {
-                    if(hearts.includes(i) && !b.classList.contains('active')) {
-                        b.innerHTML = '❤️'; b.classList.add('active'); found++;
-                        if(found === 3) { go(4); final(); }
-                    } else { b.innerHTML = '❌'; setTimeout(()=>b.innerHTML='', 400); }
+                    if(hearts.includes(i) && !b.classList.contains('active')) { b.innerHTML = '❤️'; b.classList.add('active'); found++; if(found === 3) { go(4); final(); } } 
+                    else { b.innerHTML = '❌'; setTimeout(()=>b.innerHTML='', 400); }
                 };
                 g.appendChild(b);
             }
         }
 
         function final() {
-            player.playVideo();
-            const text = "رقوشتي... انتِ احلى شيء ممكن عيوني تشوفه انتِ اجمل شخص دخل حياتي ماكو شخص بكدج احبه ياحلى من شافته عيني اكيت بنيه بالكون واحلى وحده بالكون يااميرتي الحلوه الله يحفظك اليه.";
+            if(player) player.playVideo();
+            const text = "رقوشتي... أنتِ أحلى شيء ممكن عيوني تشوفه أنتِ اجمل شخص دخل حياتي ماكو شخص بكدج احبه ياحلى من شافته عيني اكيت بنيه بالكون واحلى وحده بالكون يااميرتي الحلوه الله يحفظك اليه.";
             let i = 0;
-            function type() {
-                if(i < text.length) {
-                    document.getElementById('msg').innerHTML += text.charAt(i);
-                    i++; setTimeout(type, 80);
-                }
-            }
-            type();
-            setInterval(updateTimer, 1000);
+            function type() { if(i < text.length) { document.getElementById('msg').innerHTML += text.charAt(i); i++; setTimeout(type, 85); } }
+            type(); setInterval(updateTimer, 1000);
         }
 
         function updateTimer() {
-            const now = new Date();
-            const diff = now - startDate;
-            
+            const diff = new Date() - startDate;
             document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
             document.getElementById('minutes').innerText = Math.floor((diff / 1000 / 60) % 60);
@@ -180,4 +106,3 @@
     </script>
 </body>
 </html>
-
