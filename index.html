@@ -5,209 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رحلة إلى قلب رقية</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Reem+Kufi:wght@400;700&display=swap');
-
-        :root {
-            --accent: #ff2d55;
-            --bg-dark: #1a1a1a;
-            --glass: rgba(255, 255, 255, 0.1);
-        }
-
-        * { box-sizing: border-box; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
+        :root { --accent: #ff2d55; --bg-dark: #1a1a1a; --glass: rgba(255, 255, 255, 0.1); }
+        * { box-sizing: border-box; transition: all 0.4s ease; }
         body {
-            margin: 0; font-family: 'Cairo', sans-serif;
-            background: var(--bg-dark); color: white;
-            height: 100vh; overflow: hidden;
+            margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg-dark);
+            color: white; height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
-
-        .bg-animate {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #2d0a15 0%, #000 100%);
-            z-index: -1;
-        }
-
         .container {
-            width: 90%; max-width: 500px;
-            background: var(--glass); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px; padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            text-align: center;
-            z-index: 10;
+            width: 90%; max-width: 450px; background: var(--glass); backdrop-filter: blur(15px);
+            border-radius: 25px; padding: 35px; text-align: center; border: 1px solid rgba(255,255,255,0.1);
+            position: relative; z-index: 100;
         }
-
         .hidden { display: none !important; }
-        
-        h1 { font-family: 'Reem Kufi', sans-serif; color: var(--accent); font-size: 2rem; }
-        p { line-height: 1.8; color: #ccc; }
-
+        h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 15px; }
+        p { color: #ddd; line-height: 1.6; }
         .btn-main {
             background: linear-gradient(45deg, var(--accent), #ff708d);
-            border: none; padding: 15px 40px; border-radius: 12px;
-            color: white; font-weight: bold; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
-            margin-top: 20px; font-size: 1.1rem;
+            border: none; padding: 14px 35px; border-radius: 50px;
+            color: white; font-weight: bold; cursor: pointer; margin-top: 20px;
         }
-
-        /* لغز الدخول */
         input#ans {
             background: rgba(255,255,255,0.05); border: 2px solid var(--accent);
-            color: white; padding: 12px; border-radius: 10px;
-            width: 80%; text-align: center; font-size: 1.2rem; outline: none;
+            color: white; padding: 12px; border-radius: 12px; width: 80%; text-align: center;
         }
-
-        /* لعبة المربعات */
         .memory-game { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
         .tile { 
-            background: rgba(255,255,255,0.05); height: 70px; border-radius: 15px; 
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1.8rem; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05); height: 65px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem;
         }
-        .tile.found { background: var(--accent); animation: pulse 0.5s; }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
-
-        /* العداد */
-        .digital-clock {
-            display: flex; justify-content: space-around; margin: 25px 0;
-            background: rgba(0,0,0,0.4); padding: 15px; border-radius: 20px;
-        }
-        .clock-val { display: block; font-size: 1.6rem; color: var(--accent); font-weight: bold; }
-        .clock-unit { font-size: 0.75rem; color: #aaa; }
-
-        /* إخفاء مشغل اليوتيوب نهائياً عن العين */
-        #player-wrapper {
-            position: absolute;
-            top: -5000px;
-            left: -5000px;
-            opacity: 0;
-            pointer-events: none;
-        }
+        .found { background: var(--accent) !important; }
+        /* إخفاء فيديو اليوتيوب نهائياً */
+        #player-wrapper { position: absolute; top: -5000px; left: -5000px; opacity: 0; }
     </style>
 </head>
 <body>
-
-    <div class="bg-animate" id="bg"></div>
-    
-    <div id="player-wrapper">
-        <div id="yt-player"></div>
-    </div>
+    <div id="player-wrapper"><div id="yt-player"></div></div>
 
     <div id="step1" class="container">
-        <div style="font-size: 60px;">🌌</div>
-        <h1>مرحباً بكِ في عالمي</h1>
-        <p>هذا المكان صُمم ليكون رحلة استثنائية لكِ وحدكِ.. هل أنتِ مستعدة للاكتشاف؟</p>
-        <button class="btn-main" onclick="goToStep(2)">ابدئي الرحلة ✨</button>
+        <div style="font-size: 50px;">🌟</div>
+        <h1>مرحباً رقية..</h1>
+        <p>هذه الرحلة صُممت خصيصاً لكِ.. هل أنتِ مستعدة للدخول؟</p>
+        <button class="btn-main" onclick="next(2)">ابدئي الآن ✨</button>
     </div>
 
     <div id="step2" class="container hidden">
-        <h1>🔐 مفتاح الدخول</h1>
-        <p>ما هو اسم مشروع حبيبك البرمجي؟ (تلميح: يبدأ بـ B)</p>
-        <input type="text" id="ans" placeholder="اكتبي الإجابة هنا..">
+        <h1>🔐 اختبار الهوية</h1>
+        <p>ما هو اسم مشروع حبيبك البرمجي؟ (تلميح: ByteX)</p>
+        <input type="text" id="ans" placeholder="اكتبي الاسم هنا..">
         <br>
-        <button class="btn-main" onclick="checkAuth()">فتح القفل</button>
+        <button class="btn-main" onclick="check()">فك القفل</button>
     </div>
 
     <div id="step3" class="container hidden">
-        <h1>🔍 ابحثي عن قلبي</h1>
-        <p>يوجد 3 قلوب مخفية خلف هذه المربعات.. جديها لتصلي للنهاية:</p>
+        <h1>🔍 جدي القلوب</h1>
+        <p>ابحثي عن 3 قلوب مخفية لتفتحي المفاجأة:</p>
         <div class="memory-game" id="grid"></div>
-        <p style="color: var(--accent);">باقي لكِ: <span id="hearts-count">3</span> قلوب</p>
     </div>
 
     <div id="step4" class="container hidden">
-        <h1 id="final-title">بكل حب.. لرقية</h1>
-        <p id="typewriter" style="min-height: 80px;"></p>
-        <div class="digital-clock">
-            <div class="clock-unit"><span id="d" class="clock-val">0</span>يوم</div>
-            <div class="clock-unit"><span id="h" class="clock-val">0</span>ساعة</div>
-            <div class="clock-unit"><span id="m" class="clock-val">0</span>دقيقة</div>
-            <div class="clock-unit"><span id="s" class="clock-val">0</span>ثانية</div>
-        </div>
-        <p style="font-size: 0.9rem; color: var(--accent); font-weight: bold;">يا أجمل عيون شفتها بحياتي (برج الحوت ♓)</p>
+        <h1>أحبكِ جداً ❤️</h1>
+        <p id="typewriter"></p>
+        <p style="font-size: 0.9rem; color: var(--accent); margin-top: 20px;">يا أجمل عيون.. (برج الحوت ♓)</p>
     </div>
 
     <script>
-        let currentStep = 1;
-        const startDate = new Date("2026-03-20T00:00:00");
-
-        function goToStep(step) {
-            document.getElementById(`step${currentStep}`).classList.add('hidden');
-            document.getElementById(`step${step}`).classList.remove('hidden');
-            currentStep = step;
-        }
-
-        function checkAuth() {
-            if(document.getElementById('ans').value.toLowerCase() === 'bytex') {
-                initGame();
-                goToStep(3);
-            } else {
-                alert("إجابة خاطئة! حاولي مرة أخرى 😉");
-            }
-        }
-
-        let found = 0;
-        function initGame() {
-            const grid = document.getElementById('grid');
-            const heartPos = [1, 4, 8]; 
-            for(let i=0; i<9; i++) {
-                let t = document.createElement('div');
-                t.className = 'tile';
-                t.onclick = () => {
-                    if(heartPos.includes(i) && !t.classList.contains('found')) {
-                        t.innerHTML = '❤️'; t.classList.add('found');
-                        found++;
-                        document.getElementById('hearts-count').innerText = 3 - found;
-                        if(found === 3) nextStepFinal();
-                    } else if (!t.classList.contains('found')) {
-                        t.innerHTML = '❌';
-                        setTimeout(() => t.innerHTML = '', 400);
-                    }
-                };
-                grid.appendChild(t);
-            }
-        }
-
-        function nextStepFinal() {
-            goToStep(4);
-            startFinal();
-        }
-
-        // يوتيوب API
         let player;
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
-                videoId: 'HcodxmdesfY',
-                playerVars: { 'start': 14, 'autoplay': 0, 'controls': 0, 'showinfo': 0, 'modestbranding': 1 }
-            });
+            player = new YT.Player('yt-player', { videoId: 'HcodxmdesfY', playerVars: { 'start': 14 } });
         }
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         document.body.appendChild(tag);
 
+        function next(s) {
+            document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+            document.getElementById('step'+s).classList.remove('hidden');
+        }
+
+        function check() {
+            if(document.getElementById('ans').value.toLowerCase() === 'bytex') {
+                initGame(); next(3);
+            } else { alert("حاولي مرة ثانية! 😉"); }
+        }
+
+        let f = 0;
+        function initGame() {
+            const hPos = [1, 4, 7];
+            for(let i=0; i<9; i++) {
+                let t = document.createElement('div'); t.className = 'tile';
+                t.onclick = () => {
+                    if(hPos.includes(i) && !t.classList.contains('found')) {
+                        t.innerHTML = '❤️'; t.classList.add('found'); f++;
+                        if(f === 3) { next(4); startFinal(); }
+                    } else { t.innerHTML = '❌'; setTimeout(()=> t.innerHTML='', 400); }
+                };
+                document.getElementById('grid').appendChild(t);
+            }
+        }
+
         function startFinal() {
-            if(player) player.playVideo();
-            document.getElementById('bg').style.background = "radial-gradient(circle at center, #800020 0%, #000 100%)";
-            
-            const txt = "رقية.. أنتِ لستِ مجرد صدفة، بل أنتِ أجمل فصل في حكايتي. هذا الموقع هو تعبير بسيط عن مكانتكِ العظيمة في قلبي. أحبكِ دائماً وأبداً.";
+            player.playVideo();
+            const txt = "رقية.. أنتِ أجمل صدفة في حياتي، ومعكِ يكتمل كل شيء جميل. أحبكِ دائماً وأبداً.";
             let i = 0;
             function type() {
                 if(i < txt.length) {
                     document.getElementById('typewriter').innerHTML += txt.charAt(i);
-                    i++; setTimeout(type, 85);
+                    i++; setTimeout(type, 90);
                 }
             }
             type();
-            setInterval(updateClock, 1000);
-        }
-
-        function updateClock() {
-            const diff = new Date() - startDate;
-            document.getElementById('d').innerText = Math.floor(diff / 86400000);
-            document.getElementById('h').innerText = Math.floor((diff / 3600000) % 24);
-            document.getElementById('m').innerText = Math.floor((diff / 60000) % 60);
-            document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
         }
     </script>
 </body>
