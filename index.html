@@ -3,169 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لأجمل رقية في الكون</title>
+    <title>رحلة إلى قلب رقية</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-        :root { --primary: #ff4d6d; --secondary: #c9184a; }
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Reem+Kufi:wght@400;700&display=swap');
+
+        :root {
+            --accent: #ff2d55;
+            --bg-dark: #1a1a1a;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
         body {
-            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffdde1);
-            background-size: 400% 400%; animation: gradientBG 15s ease infinite; overflow: hidden;
+            margin: 0; font-family: 'Cairo', sans-serif;
+            background: var(--bg-dark); color: white;
+            height: 100vh; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .card {
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 30px;
-            padding: 35px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 400px; width: 90%; z-index: 100;
+
+        /* خلفية سينمائية متحركة */
+        .bg-animate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #2d0a15 0%, #000 100%);
+            z-index: -1;
         }
-        .hidden { display: none; }
-        h1 { color: var(--secondary); font-size: 1.7rem; margin-bottom: 15px; }
-        p { color: #444; font-size: 1.1rem; line-height: 1.6; }
-        .btn-group { display: flex; justify-content: center; gap: 15px; position: relative; min-height: 60px; }
-        button { padding: 12px 25px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-yes { background: var(--primary); color: white; }
-        .btn-no { background: #eee; color: #555; position: absolute; }
-        .counter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
-        .counter-item { background: #fff0f3; padding: 10px; border-radius: 15px; border: 1px solid #ffccd5; }
-        .counter-value { display: block; font-size: 1.4rem; font-weight: bold; color: var(--secondary); }
-        .counter-label { font-size: 0.8rem; color: #777; }
-        .heart-particle { position: absolute; pointer-events: none; animation: fall linear forwards; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
-        /* مشغل الفيديو مخفي تماماً */
-        #yt-player { position: absolute; top: -1000px; left: -1000px; width: 1px; height: 1px; }
+
+        .container {
+            width: 90%; max-width: 500px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .hidden { opacity: 0; transform: translateY(30px); pointer-events: none; position: absolute; }
+        .active { opacity: 1; transform: translateY(0); pointer-events: all; position: relative; }
+
+        h1 { font-family: 'Reem Kufi', sans-serif; color: var(--accent); font-size: 2rem; }
+        p { line-height: 1.8; color: #ccc; }
+
+        /* الأزرار الاحترافية */
+        .btn-main {
+            background: linear-gradient(45deg, var(--accent), #ff708d);
+            border: none; padding: 15px 40px; border-radius: 12px;
+            color: white; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
+            margin-top: 20px; font-size: 1.1rem;
+        }
+        .btn-main:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(255, 45, 85, 0.5); }
+
+        /* شريط التقدم */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 5px;
+            background: var(--accent); width: 0%; transition: 0.3s;
+        }
+
+        /* لعبة الذاكرة الصغيرة */
+        .memory-game { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .tile { 
+            background: rgba(255,255,255,0.05); height: 60px; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            font-size: 1.5rem;
+        }
+        .tile.found { background: var(--accent); }
+
+        /* العداد الرقمي */
+        .digital-clock {
+            display: flex; justify-content: space-around; margin: 25px 0;
+            background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px;
+        }
+        .clock-unit { font-size: 0.8rem; color: #888; }
+        .clock-val { display: block; font-size: 1.8rem; color: var(--accent); font-weight: bold; }
+
+        #yt-player { position: absolute; left: -9999px; }
     </style>
 </head>
 <body>
 
+    <div class="bg-animate" id="bg"></div>
+    <div class="progress-bar" id="progress"></div>
     <div id="yt-player"></div>
 
-    <div id="step0" class="card">
-        <div style="font-size: 50px;">🤔</div>
-        <h1>اختبار لرقية..</h1>
-        <p>هل أنا أحلى شيء حصل لكِ في هذه السنة؟</p>
-        <div class="btn-group">
-            <button class="btn-yes" onclick="goStep1()">أكيد طبعاً! ❤️</button>
-            <button id="btn-no" class="btn-no" onmouseover="moveButton()">لا 😜</button>
+    <div id="step1" class="container active">
+        <div style="font-size: 60px;">🌌</div>
+        <h1>مرحباً بكِ في عالمي</h1>
+        <p>هذا المكان ليس مجرد موقع، بل هو رحلة قصيرة صممتها لكِ وحدكِ.. هل أنتِ مستعدة للدخول؟</p>
+        <button class="btn-main" onclick="nextStep(2)">ابدئي الرحلة ✨</button>
+    </div>
+
+    <div id="step2" class="container hidden">
+        <h1>🔐 مفتاح الدخول</h1>
+        <p>للأمان.. ما هو اسم الأداة البرمجية التي طورها حبيبك (صاحب هذا الموقع) لمشروعه الدراسي؟</p>
+        <input type="text" id="ans" style="background:none; border:2px solid var(--accent); color:white; padding:10px; border-radius:8px; width:80%; text-align:center;">
+        <br>
+        <button class="btn-main" onclick="checkAuth()">فك القفل</button>
+    </div>
+
+    <div id="step3" class="container hidden">
+        <h1>🔍 ابحثي عن قلبي</h1>
+        <p>اضغطي على المربعات لتجدي 3 قلوب مخفية لتفتح البوابة التالية:</p>
+        <div class="memory-game" id="grid"></div>
+        <p>القلوب المتبقية: <span id="hearts-count">3</span></p>
+    </div>
+
+    <div id="step4" class="container hidden">
+        <h1 id="final-title">بكل حب.. لرقية</h1>
+        <p id="typewriter" style="min-height: 100px;"></p>
+        <div class="digital-clock">
+            <div class="clock-unit"><span id="d" class="clock-val">0</span>أيام</div>
+            <div class="clock-unit"><span id="h" class="clock-val">0</span>ساعات</div>
+            <div class="clock-unit"><span id="m" class="clock-val">0</span>دقائق</div>
+            <div class="clock-unit"><span id="s" class="clock-val">0</span>ثواني</div>
         </div>
-    </div>
-
-    <div id="step1" class="card hidden">
-        <div style="font-size: 50px;">✨</div>
-        <h1>كنت أعرف! 😂</h1>
-        <p>بما أن إجابتكِ صحيحة، استعدي للمفاجأة..</p>
-        <button class="btn-yes" onclick="goStep2()">افتحي المفاجأة 🎁</button>
-    </div>
-
-    <div id="step2" class="card hidden">
-        <h1>إلى رقية..</h1>
-        <p id="typewriter" style="min-height: 80px;"></p>
-        <button id="finalBtn" class="btn-yes hidden" onclick="goStep3()">أكملي للنهاية ❤️</button>
-    </div>
-
-    <div id="step3" class="card hidden">
-        <div style="font-size: 50px;">❤️</div>
-        <h1>أحبكِ يا رقية</h1>
-        <p>مرّت على صدفة العمر الجميلة:</p>
-        <div class="counter-grid">
-            <div class="counter-item"><span id="days" class="counter-value">0</span><span class="counter-label">يوم</span></div>
-            <div class="counter-item"><span id="hours" class="counter-value">0</span><span class="counter-label">ساعة</span></div>
-            <div class="counter-item"><span id="minutes" class="counter-value">0</span><span class="counter-label">دقيقة</span></div>
-            <div class="counter-item"><span id="seconds" class="counter-value">0</span><span class="counter-label">ثانية</span></div>
-        </div>
-        <p style="margin-top:20px; font-weight:bold; color:var(--secondary);">يا أجمل عيون شفتها بحياتي.</p>
+        <p style="font-size: 0.9rem; color: var(--accent);">يا أجمل عيون شفتها بحياتي (برج الحوت ♓)</p>
+        <button class="btn-main" onclick="location.reload()">أعيدي الرحلة ❤️</button>
     </div>
 
     <script>
-        // رابط بديل للأغنية لضمان العمل
-        const videoID = 'HcodxmdesfY'; 
-        const startTime = 14; 
-        const startDate = new Date("2026-03-20T00:00:00"); 
+        let currentStep = 1;
+        const totalSteps = 4;
+        const startDate = new Date("2026-03-20T00:00:00");
 
+        function nextStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById(`step${step}`).classList.add('active');
+                document.getElementById(`step${step}`).classList.remove('hidden');
+                currentStep = step;
+                document.getElementById('progress').style.width = (step/totalSteps)*100 + "%";
+            }, 500);
+        }
+
+        // إثبات الهوية
+        function checkAuth() {
+            if(document.getElementById('ans').value.toLowerCase() === 'bytex') {
+                initGame();
+                nextStep(3);
+            } else {
+                alert("الإجابة خاطئة.. تلميحي: يبدأ بـ B وينتهي بـ X");
+            }
+        }
+
+        // لعبة القلوب المخفية
+        let found = 0;
+        function initGame() {
+            const grid = document.getElementById('grid');
+            const heartPositions = [2, 5, 7]; // مواقع عشوائية
+            for(let i=0; i<9; i++) {
+                let t = document.createElement('div');
+                t.className = 'tile';
+                t.onclick = () => {
+                    if(heartPositions.includes(i) && !t.classList.contains('found')) {
+                        t.innerHTML = '❤️'; t.classList.add('found');
+                        found++;
+                        document.getElementById('hearts-count').innerText = 3 - found;
+                        if(found === 3) {
+                            startFinalStage();
+                            nextStep(4);
+                        }
+                    } else {
+                        t.innerHTML = '❌';
+                        setTimeout(() => t.innerHTML = '', 500);
+                    }
+                };
+                grid.appendChild(t);
+            }
+        }
+
+        // المرحلة النهائية والموسيقى
         let player;
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
-                height: '1', width: '1', videoId: videoID,
-                playerVars: { 'start': startTime, 'autoplay': 0, 'controls': 0, 'enablejsapi': 1 }
+                videoId: 'HcodxmdesfY',
+                playerVars: { 'start': 14, 'controls': 0 }
             });
         }
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
 
-        function moveButton() {
-            const btn = document.getElementById('btn-no');
-            btn.style.left = Math.random() * 70 + 'vw';
-            btn.style.top = Math.random() * 70 + 'vh';
-            btn.style.position = 'fixed';
-        }
-
-        function goStep1() {
-            document.getElementById('step0').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
-        }
-
-        function goStep2() {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
+        function startFinalStage() {
+            player.playVideo();
+            document.getElementById('bg').style.background = "radial-gradient(circle at center, #800020 0%, #000 100%)";
             
-            // محاولة تشغيل الأغنية بقوة بعد الضغط
-            if (player && typeof player.playVideo === 'function') {
-                player.setVolume(100);
-                player.seekTo(startTime);
-                player.playVideo();
-            }
-            
-            startTypewriter();
-            startHearts();
-        }
-
-        function startTypewriter() {
-            const text = "من بين كل الناس، عيني لم تقع إلا عليكِ.. رقية، أنتِ أجمل صدفة غيرت حياتي، ومعكِ يكتمل عيدي كل يوم.";
+            const txt = "رقية.. من اللحظة التي دخلتِ فيها حياتي، أدركتُ أن كل الأشياء الجميلة كانت تنتظركِ. أنتِ لستِ فقط حلمي، بل أنتِ واقعي الأجمل الذي أعيشه كل يوم. أحبكِ جداً.";
             let i = 0;
-            const element = document.getElementById('typewriter');
             function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, 80);
-                } else {
-                    document.getElementById('finalBtn').classList.remove('hidden');
+                if(i < txt.length) {
+                    document.getElementById('typewriter').innerHTML += txt.charAt(i);
+                    i++; setTimeout(type, 80);
                 }
             }
             type();
+            setInterval(updateClock, 1000);
+            startStars();
         }
 
-        function goStep3() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.remove('hidden');
-            document.body.style.background = "#ff4d6d";
+        function updateClock() {
+            const diff = new Date() - startDate;
+            document.getElementById('d').innerText = Math.floor(diff / 86400000);
+            document.getElementById('h').innerText = Math.floor((diff / 3600000) % 24);
+            document.getElementById('m').innerText = Math.floor((diff / 60000) % 60);
+            document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
         }
 
-        function updateCounter() {
-            const now = new Date();
-            const diff = now - startDate;
-            document.getElementById('days').innerText = Math.floor(diff / 86400000);
-            document.getElementById('hours').innerText = Math.floor((diff / 3600000) % 24);
-            document.getElementById('minutes').innerText = Math.floor((diff / 60000) % 60);
-            document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
-        }
-        setInterval(updateCounter, 1000);
-
-        function startHearts() {
+        function startStars() {
             setInterval(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart-particle');
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '-20px';
-                heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
-                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 6000);
-            }, 300);
+                const s = document.createElement('div');
+                s.innerHTML = '✨';
+                s.style.position = 'fixed';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.opacity = Math.random();
+                s.style.fontSize = '10px';
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 2000);
+            }, 100);
         }
     </script>
 </body>
