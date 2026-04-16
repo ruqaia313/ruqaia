@@ -3,115 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رحلة إلى قلب رقية</title>
+    <title>إلى رقية الغالية</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
-        :root { --accent: #ff2d55; --bg-dark: #1a1a1a; --glass: rgba(255, 255, 255, 0.1); }
-        * { box-sizing: border-box; transition: all 0.4s ease; }
+        
+        :root { --accent: #ff2d55; --bg: #0f0f0f; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
         body {
-            margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg-dark);
-            color: white; height: 100vh; overflow: hidden;
+            background-color: var(--bg);
+            height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
+            color: white;
         }
-        .container {
-            width: 90%; max-width: 450px; background: var(--glass); backdrop-filter: blur(15px);
-            border-radius: 25px; padding: 35px; text-align: center; border: 1px solid rgba(255,255,255,0.1);
-            position: relative; z-index: 100;
+
+        /* حاوية اليوتيوب - مخفية تماماً ومستحيل تظهر */
+        #video-hidden-container {
+            position: absolute;
+            width: 1px; height: 1px;
+            top: -1000px; left: -1000px;
+            opacity: 0; pointer-events: none;
+            z-index: -999;
         }
+
+        .main-card {
+            width: 90%; max-width: 420px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px; padding: 40px;
+            text-align: center; z-index: 999;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
         .hidden { display: none !important; }
-        h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 15px; }
-        p { color: #ddd; line-height: 1.6; }
-        .btn-main {
-            background: linear-gradient(45deg, var(--accent), #ff708d);
-            border: none; padding: 14px 35px; border-radius: 50px;
-            color: white; font-weight: bold; cursor: pointer; margin-top: 20px;
+
+        h1 { color: var(--accent); margin-bottom: 20px; font-size: 1.8rem; }
+        p { color: #ccc; line-height: 1.7; margin-bottom: 25px; }
+
+        .btn {
+            background: var(--accent); color: white; border: none;
+            padding: 15px 35px; border-radius: 50px; cursor: pointer;
+            font-weight: bold; font-size: 1.1rem; width: 100%;
+            box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
         }
-        input#ans {
-            background: rgba(255,255,255,0.05); border: 2px solid var(--accent);
-            color: white; padding: 12px; border-radius: 12px; width: 80%; text-align: center;
+
+        input {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.1);
+            border: 1px solid var(--accent); border-radius: 12px;
+            color: white; text-align: center; margin-bottom: 20px;
         }
-        .memory-game { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-        .tile { 
-            background: rgba(255,255,255,0.05); height: 65px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem;
+
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .box { 
+            background: rgba(255,255,255,0.05); height: 70px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            font-size: 1.5rem; border: 1px solid rgba(255,255,255,0.1);
         }
-        .found { background: var(--accent) !important; }
-        /* إخفاء فيديو اليوتيوب نهائياً */
-        #player-wrapper { position: absolute; top: -5000px; left: -5000px; opacity: 0; }
+        .box.active { background: var(--accent); border: none; }
     </style>
 </head>
 <body>
-    <div id="player-wrapper"><div id="yt-player"></div></div>
 
-    <div id="step1" class="container">
-        <div style="font-size: 50px;">🌟</div>
+    <div id="video-hidden-container">
+        <div id="yt-player"></div>
+    </div>
+
+    <div id="s1" class="main-card">
+        <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
         <h1>مرحباً رقية..</h1>
-        <p>هذه الرحلة صُممت خصيصاً لكِ.. هل أنتِ مستعدة للدخول؟</p>
-        <button class="btn-main" onclick="next(2)">ابدئي الآن ✨</button>
+        <p>لقد صممت لكِ تجربة خاصة جداً، هل أنتِ جاهزة لتبدأي الرحلة؟</p>
+        <button class="btn" onclick="go(2)">ابدئي الرحلة</button>
     </div>
 
-    <div id="step2" class="container hidden">
-        <h1>🔐 اختبار الهوية</h1>
-        <p>ما هو اسم مشروع حبيبك البرمجي؟ (تلميح: ByteX)</p>
-        <input type="text" id="ans" placeholder="اكتبي الاسم هنا..">
-        <br>
-        <button class="btn-main" onclick="check()">فك القفل</button>
+    <div id="s2" class="main-card hidden">
+        <h1>🔐 إثبات هوية</h1>
+        <p>ما هو اسم مشروع حبيبك البرمجي؟ (تلميح: يبدأ بحرف B)</p>
+        <input type="text" id="pass" placeholder="اكتبي الاسم هنا..">
+        <button class="btn" onclick="verify()">تحقق</button>
     </div>
 
-    <div id="step3" class="container hidden">
+    <div id="s3" class="main-card hidden">
         <h1>🔍 جدي القلوب</h1>
-        <p>ابحثي عن 3 قلوب مخفية لتفتحي المفاجأة:</p>
-        <div class="memory-game" id="grid"></div>
+        <p>هناك 3 قلوب مخفية، ابحثي عنها لتفتحي المفاجأة النهائية:</p>
+        <div class="grid" id="game-grid"></div>
     </div>
 
-    <div id="step4" class="container hidden">
+    <div id="s4" class="main-card hidden">
         <h1>أحبكِ جداً ❤️</h1>
-        <p id="typewriter"></p>
-        <p style="font-size: 0.9rem; color: var(--accent); margin-top: 20px;">يا أجمل عيون.. (برج الحوت ♓)</p>
+        <p id="msg" style="min-height: 80px;"></p>
+        <p style="color: var(--accent); font-weight: bold; margin-top: 10px;">برج الحوت ♓</p>
     </div>
 
     <script>
         let player;
+        const startDate = new Date("2026-03-20T00:00:00");
+
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', { videoId: 'HcodxmdesfY', playerVars: { 'start': 14 } });
+            player = new YT.Player('yt-player', {
+                videoId: 'HcodxmdesfY',
+                playerVars: { 'start': 14, 'autoplay': 0, 'controls': 0 }
+            });
         }
-        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
         document.body.appendChild(tag);
 
-        function next(s) {
-            document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-            document.getElementById('step'+s).classList.remove('hidden');
+        function go(n) {
+            document.querySelectorAll('.main-card').forEach(c => c.classList.add('hidden'));
+            document.getElementById('s'+n).classList.remove('hidden');
         }
 
-        function check() {
-            if(document.getElementById('ans').value.toLowerCase() === 'bytex') {
-                initGame(); next(3);
-            } else { alert("حاولي مرة ثانية! 😉"); }
+        function verify() {
+            if(document.getElementById('pass').value.toLowerCase() === 'bytex') {
+                setupGrid(); go(3);
+            } else { alert("الإجابة خاطئة يا رقية! حاولي مرة أخرى 😉"); }
         }
 
-        let f = 0;
-        function initGame() {
-            const hPos = [1, 4, 7];
+        let found = 0;
+        function setupGrid() {
+            const hearts = [0, 4, 8];
+            const g = document.getElementById('game-grid');
             for(let i=0; i<9; i++) {
-                let t = document.createElement('div'); t.className = 'tile';
-                t.onclick = () => {
-                    if(hPos.includes(i) && !t.classList.contains('found')) {
-                        t.innerHTML = '❤️'; t.classList.add('found'); f++;
-                        if(f === 3) { next(4); startFinal(); }
-                    } else { t.innerHTML = '❌'; setTimeout(()=> t.innerHTML='', 400); }
+                let b = document.createElement('div'); b.className = 'box';
+                b.onclick = () => {
+                    if(hearts.includes(i) && !b.classList.contains('active')) {
+                        b.innerHTML = '❤️'; b.classList.add('active'); found++;
+                        if(found === 3) { go(4); final(); }
+                    } else { b.innerHTML = '❌'; setTimeout(()=>b.innerHTML='', 400); }
                 };
-                document.getElementById('grid').appendChild(t);
+                g.appendChild(b);
             }
         }
 
-        function startFinal() {
+        function final() {
             player.playVideo();
-            const txt = "رقية.. أنتِ أجمل صدفة في حياتي، ومعكِ يكتمل كل شيء جميل. أحبكِ دائماً وأبداً.";
+            const text = "رقية.. أنتِ لستِ مجرد شخص عابر، أنتِ أجمل ما حدث لي. شكراً لأنكِ جعلتِ لحياتي طعماً آخر. سأبقى أحبكِ دائماً.";
             let i = 0;
             function type() {
-                if(i < txt.length) {
-                    document.getElementById('typewriter').innerHTML += txt.charAt(i);
-                    i++; setTimeout(type, 90);
+                if(i < text.length) {
+                    document.getElementById('msg').innerHTML += text.charAt(i);
+                    i++; setTimeout(type, 80);
                 }
             }
             type();
