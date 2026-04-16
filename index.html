@@ -17,7 +17,6 @@
             color: white;
         }
 
-        /* حاوية اليوتيوب - مخفية تماماً ومستحيل تظهر */
         #video-hidden-container {
             position: absolute;
             width: 1px; height: 1px;
@@ -31,7 +30,7 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; padding: 40px;
+            border-radius: 30px; padding: 30px;
             text-align: center; z-index: 999;
             box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
@@ -56,11 +55,21 @@
 
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
         .box { 
-            background: rgba(255,255,255,0.05); height: 70px; border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05); height: 70px; border-radius: 15px;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1.5rem; border: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .box.active { background: var(--accent); border: none; }
+
+        /* ستايل العداد */
+        .timer-container {
+            display: flex; justify-content: space-around;
+            margin-top: 25px; background: rgba(0,0,0,0.3);
+            padding: 15px; border-radius: 20px;
+            border: 1px solid rgba(255, 45, 85, 0.2);
+        }
+        .timer-unit { font-size: 0.7rem; color: #888; }
+        .timer-val { display: block; font-size: 1.4rem; color: var(--accent); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -78,7 +87,7 @@
 
     <div id="s2" class="main-card hidden">
         <h1>🔐 إثبات هوية</h1>
-        <p>ما هو اسم مشروع حبيبك البرمجي؟ (تلميح: يبدأ بحرف B)</p>
+        <p>ما هو اسم مشروع حبيبك البرمجي؟</p>
         <input type="text" id="pass" placeholder="اكتبي الاسم هنا..">
         <button class="btn" onclick="verify()">تحقق</button>
     </div>
@@ -91,13 +100,22 @@
 
     <div id="s4" class="main-card hidden">
         <h1>أحبكِ جداً ❤️</h1>
-        <p id="msg" style="min-height: 80px;"></p>
-        <p style="color: var(--accent); font-weight: bold; margin-top: 10px;">برج الحوت ♓</p>
+        <p id="msg" style="min-height: 60px;"></p>
+        
+        <div class="timer-container">
+            <div class="timer-unit"><span id="days" class="timer-val">0</span>يوم</div>
+            <div class="timer-unit"><span id="hours" class="timer-val">0</span>ساعة</div>
+            <div class="timer-unit"><span id="minutes" class="timer-val">0</span>دقيقة</div>
+            <div class="timer-unit"><span id="seconds" class="timer-val">0</span>ثانية</div>
+        </div>
+
+        <p style="font-size: 1.5rem; margin-top: 20px;">♓</p>
     </div>
 
     <script>
         let player;
-        const startDate = new Date("2026-03-20T00:00:00");
+        // ملاحظة: غير التاريخ هنا لتاريخ بداية علاقتكم الحقيقي
+        const startDate = new Date("2024-03-20T00:00:00"); 
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
@@ -117,7 +135,7 @@
         function verify() {
             if(document.getElementById('pass').value.toLowerCase() === 'bytex') {
                 setupGrid(); go(3);
-            } else { alert("الإجابة خاطئة يا رقية! حاولي مرة أخرى 😉"); }
+            } else { alert("الإجابة خاطئة يا رقية! 😉"); }
         }
 
         let found = 0;
@@ -138,7 +156,7 @@
 
         function final() {
             player.playVideo();
-            const text = "رقية.. أنتِ لستِ مجرد شخص عابر، أنتِ أجمل ما حدث لي. شكراً لأنكِ جعلتِ لحياتي طعماً آخر. سأبقى أحبكِ دائماً.";
+            const text = "رقوشتي... انتِ احلى شيء ممكن عيوني تشوفه انتِ اجمل شخص دخل حياتي ماكو شخص بكدج احبه ياحلى من شافته عيني اكيت بنيه بالكون واحلى وحده بالكون يااميرتي الحلوه الله يحفظك اليه.";
             let i = 0;
             function type() {
                 if(i < text.length) {
@@ -147,7 +165,19 @@
                 }
             }
             type();
+            setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+            
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            document.getElementById('minutes').innerText = Math.floor((diff / 1000 / 60) % 60);
+            document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
         }
     </script>
 </body>
 </html>
+
